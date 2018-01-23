@@ -5,13 +5,13 @@ from exchange import Exchange
 from statistics import PeriodRange
 from statistics import Statistics
 
-class BestAsset:
+class BestAssetTest:
 
     def __init__(self, period, limit):
         self.period = period
         self.limit = limit
         self.exchange = Exchange()
-        self.statistics = Statistics()
+        self.statistics = Statistics(default="USDT")
         self.currentAssetId = None
 
         self.buyPrice = 0
@@ -20,8 +20,6 @@ class BestAsset:
         try:
             bestAssetId = self.statistics.get_best_asset(self.period, self.limit)
             if (bestAssetId != self.currentAssetId):
-                # Sell current asset
-                self.exchange.sell_asset(self.currentAssetId)
 
                 if (self.currentAssetId != None):
                     asset = self.statistics.get_asset(self.currentAssetId)
@@ -37,9 +35,6 @@ class BestAsset:
                     finally:
                         file.close()
 
-                # Buy best asset
-                self.exchange.buy_asset(bestAssetId)
-
                 if (bestAssetId != None):
                     asset = self.statistics.get_asset(bestAssetId)
                     self.buyPrice = asset[0]["price_eur"]
@@ -52,7 +47,7 @@ class BestAsset:
             pass
 
     def run(self):
-        print("Strategy Best Asset %s of %d" %(self.period.value, self.limit))
+        print("[TEST] Strategy Best Asset %s of %d" %(self.period.value, self.limit))
         while True:
             self.best_asset()
             time.sleep(10) # Sleep 10 seconds

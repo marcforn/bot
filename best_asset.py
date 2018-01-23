@@ -11,7 +11,7 @@ class BestAsset:
         self.period = period
         self.limit = limit
         self.exchange = Exchange()
-        self.statistics = Statistics()
+        self.statistics = Statistics(default="USDT")
         self.currentAssetSymbol = None
 
         self.buyPrice = 0

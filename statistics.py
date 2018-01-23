@@ -9,16 +9,17 @@ class PeriodRange(enum.Enum):
 
 class Statistics:
 
-    def __init__(self):
+    def __init__(self, default):
       self.market = Market()
+      self.default = default
 
     def get_asset(self, assetName):
         asset = self.market.ticker(currency=assetName, convert='EUR')
         return asset
 
     def get_best_asset(self, period, limit):
-        bestAssetSymbol = "BTC"
-        bestAssetPercentage = -100
+        bestAssetSymbol = self.default
+        bestAssetPercentage = 0
 
         response = self.market.ticker(limit=limit, convert='EUR')
         tickerListLenght = len(response)
