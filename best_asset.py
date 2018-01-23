@@ -7,18 +7,16 @@ from statistics import Statistics
 
 class BestAsset:
 
-    def __init__(self, period, limit):
+    def __init__(self, period):
         self.period = period
-        self.limit = limit
-        self.exchange = Exchange()
         self.statistics = Statistics(default="USDT")
+        self.exchange = Exchange(default="USDT")
         self.currentAssetSymbol = None
-
-        self.buyPrice = 0
 
     def best_asset(self):
         try:
-            bestAssetSymbol = self.statistics.get_best_asset(self.period, self.limit)
+            tickerRange = ["BTC", "ETH", "NEO", "BNB", "LTC", "BCH"]
+            bestAssetSymbol = self.statistics.get_best_asset(self.period, tickerRange)
             if (bestAssetSymbol != self.currentAssetSymbol):
                 # Print on console best asset
                 print("Best Asset: %s" %(bestAssetSymbol))
@@ -36,7 +34,7 @@ class BestAsset:
             pass
 
     def run(self):
-        print("Strategy Best Asset %s of %d" %(self.period.value, self.limit))
+        print("Strategy Best Asset %s" %(self.period.value))
         while True:
             self.best_asset()
             time.sleep(10) # Sleep 10 seconds
