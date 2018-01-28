@@ -1,9 +1,8 @@
 import time
 import csv
-from pprint import pprint
 from exchange import Exchange
-from statistics import PeriodRange
 from statistics import Statistics
+
 
 class BestAssetTest:
 
@@ -11,43 +10,44 @@ class BestAssetTest:
         self.period = period
         self.statistics = Statistics(default="USDT")
         self.exchange = Exchange(default="USDT")
-        self.currentAssetSymbol = None
+        self.current_asset_symbol = None
 
         self.buyPrice = 0
 
     def best_asset(self):
         try:
-            tickerRange = ["BTC", "ETH", "NEO", "BNB", "LTC", "BCH"]
-            bestAssetSymbol = self.statistics.get_best_asset(self.period, tickerRange)
+            ticker_range = ["BTC", "ETH", "NEO", "BNB", "LTC", "BCH"]
+            best_asset_symbol = self.statistics.get_best_asset(self.period, ticker_range)
 
-            if (bestAssetSymbol != self.currentAssetSymbol):
-                if (self.currentAssetSymbol != None):
-                    currentPrice = self.exchange.get_asset_price(self.currentAssetSymbol)
+            if best_asset_symbol != self.current_asset_symbol:
+                if self.current_asset_symbol is not None:
+                    current_price = self.exchange.get_asset_price(self.current_asset_symbol)
 
-                    print(currentPrice)
-                    percentage = (float(currentPrice) - float(self.buyPrice)) / float(self.buyPrice) * 100
-                    print("Selling asset %s at %s with percentage %s" %(self.currentAssetSymbol, currentPrice, percentage))
+                    print(current_price)
+                    percentage = (float(current_price) - float(self.buyPrice)) / float(self.buyPrice) * 100
+                    print("Selling asset %s at %s with percentage %s" % (
+                        self.current_asset_symbol, current_price, percentage))
 
-                    fileName = "output_%s.csv" %(self.period.value)
-                    file = open(fileName, 'a')
+                    file_name = "output_%s.csv" % self.period.value
+                    file = open(file_name, 'a')
                     try:
                         writer = csv.writer(file)
-                        writer.writerow((self.currentAssetSymbol, self.buyPrice, currentPrice, percentage))
+                        writer.writerow((self.current_asset_symbol, self.buyPrice, current_price, percentage))
                     finally:
                         file.close()
 
-                if (bestAssetSymbol != None):
-                    self.buyPrice = self.exchange.get_asset_price(bestAssetSymbol)
-                    print("Buying asset %s at %s" %(bestAssetSymbol, self.buyPrice))
+                if best_asset_symbol is not None:
+                    self.buyPrice = self.exchange.get_asset_price(best_asset_symbol)
+                    print("Buying asset %s at %s" % (best_asset_symbol, self.buyPrice))
 
                 # Set new current asset
-                self.currentAssetSymbol = bestAssetSymbol
+                self.current_asset_symbol = best_asset_symbol
         except Exception as e:
             print(e)
             pass
 
     def run(self):
-        print("[TEST] Strategy Best Asset %s" %(self.period.value))
+        print("[TEST] Strategy Best Asset %s" % self.period.value)
         while True:
             self.best_asset()
-            time.sleep(10) # Sleep 10 seconds
+            time.sleep(10)  # Sleep 10 seconds

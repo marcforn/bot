@@ -1,8 +1,3 @@
-import schedule
-import time
-from pprint import pprint
-from exchange import *
-from statistics import *
 from best_asset import *
 from best_asset_test import *
 

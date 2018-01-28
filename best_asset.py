@@ -1,9 +1,7 @@
 import time
-import csv
-from pprint import pprint
 from exchange import Exchange
-from statistics import PeriodRange
 from statistics import Statistics
+
 
 class BestAsset:
 
@@ -15,26 +13,26 @@ class BestAsset:
 
     def best_asset(self):
         try:
-            tickerRange = ["BTC", "ETH", "NEO", "BNB", "LTC", "BCH"]
-            bestAssetSymbol = self.statistics.get_best_asset(self.period, tickerRange)
-            if (bestAssetSymbol != self.currentAssetSymbol):
+            ticker_range = ["BTC", "ETH", "NEO", "BNB", "LTC", "BCH"]
+            best_asset_symbol = self.statistics.get_best_asset(self.period, ticker_range)
+            if best_asset_symbol != self.currentAssetSymbol:
                 # Print on console best asset
-                print("Best Asset: %s" %(bestAssetSymbol))
+                print("Best Asset: %s" % best_asset_symbol)
 
                 # Sell all assets
                 self.exchange.sell_all_assets()
 
                 # Buy best asset
-                self.exchange.buy_asset(bestAssetSymbol)
+                self.exchange.buy_asset(best_asset_symbol)
 
                 # Set new current asset
-                self.currentAssetSymbol = bestAssetSymbol
+                self.currentAssetSymbol = best_asset_symbol
         except Exception as e:
             print(e)
             pass
 
     def run(self):
-        print("Strategy Best Asset %s" %(self.period.value))
+        print("Strategy Best Asset %s" % self.period.value)
         while True:
             self.best_asset()
-            time.sleep(10) # Sleep 10 seconds
+            time.sleep(10)  # Sleep 10 seconds
